@@ -2,7 +2,7 @@
 #define _HANDLER_H_
 
 // callback typedef
-typedef void *(*client_t)(void *);
+typedef void *(*callback_t)(void *);
 
 
 

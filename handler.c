@@ -8,8 +8,8 @@ typedef enum{
 }n_event_t;
 
 // arrays which hold the clients for the respective events 
-static callback_t ev1_clients[n_ev1] = {};
-static callback_t ev2_clients[n_ev1] = {};
+static callback_t ev1_clients[n_ev1] = {0};
+static callback_t ev2_clients[n_ev1] = {0};
 
 // local functions
 
@@ -20,9 +20,23 @@ void _registerCallback(callback_t client,
 
 // interface functions
 
-void handler_process_event(event_t event)
+int handler_process_event(event_t event)
 {
-    
+    switch(event){
+        case ev1:
+            _notify(ev1_clients, n_ev1);
+            break;
+
+        case ev2:
+            _notify(ev2_clients, n_ev2);
+            break;
+
+        default:
+            // invalid event
+            return -1;
+            break;
+    }
+    return -1;
 }
 
 
@@ -31,10 +45,10 @@ void handler_process_event(event_t event)
 int handler_resgister_CB(event_t event, callback_t client)
 {
     switch(event){
-        case ev_1:
+        case ev1:
             return _registerCallback(client, ev1_clients, n_ev1);
             break;
-        case ev_2:
+        case ev2:
             return _registerCallback(client, ev2_clients, n_ev2);
             break;
         default:
@@ -49,10 +63,10 @@ int handler_resgister_CB(event_t event, callback_t client)
 int handler_unregsiter_CB(unsigned int id, event_t event)
 {
     switch(event){
-        case ev_1:
+        case ev1:
             return _unregisterCallback(id, ev1_clients, n_ev1);
             break;
-        case ev_2:
+        case ev2:
             return _unregisterCallback(id, ev2_clients, n_ev2);
             break;
         default:
@@ -69,7 +83,7 @@ void _notify(callback_t client_array[], n_event_t n)
         // check if entry exists
         if(client_array[i] != 0){
             // execute the callback ("call back to the client!")
-            client_array[i]();
+            client_array[i](0);
         }
     }
 }
